@@ -1,0 +1,70 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #0a0b1e;
+  --bg-grid: rgba(0, 242, 255, 0.04);
+  --surface: rgba(14, 16, 42, 0.85);
+  --surface-elevated: rgba(20, 22, 55, 0.9);
+  --input-bg: rgba(8, 10, 28, 0.9);
+  --border: rgba(0, 242, 255, 0.12);
+  --border-strong: rgba(0, 242, 255, 0.35);
+  --text: #e8eaf6;
+  --text-muted: #8b92b8;
+  --cyan: #00f2ff;
+  --purple: #a855f7;
+  --magenta: #d946ef;
+  --green: #22ff88;
+  --yellow: #ffd60a;
+  --red: #ff3b5c;
+  --overdue: #ff6b35;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --glow-cyan: 0 0 20px rgba(0, 242, 255, 0.25);
+  --glow-purple: 0 0 20px rgba(168, 85, 247, 0.25);
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(var(--bg-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--bg-grid) 1px, transparent 1px);
+  background-size: 40px 40px;
+  color: var(--text);
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0, 242, 255, 0.08), transparent),
+    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(168, 85, 247, 0.06), transparent);
+  pointer-events: none;
+  z-index: 0;
+}
+
+#root {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+}
+
+input,
+textarea,
+button {
+  font-family: inherit;
+}
+
+input[type='datetime-local']::-webkit-calendar-picker-indicator {
+  filter: invert(0.8) sepia(1) saturate(5) hue-rotate(160deg);
+  cursor: pointer;
+}

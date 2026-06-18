@@ -23,7 +23,7 @@
   flex-wrap: wrap;
 }
 
-.neural-badge {
+.header-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
@@ -34,13 +34,13 @@
   letter-spacing: 0.02em;
 }
 
-.neural-badge.cyan {
+.header-badge.cyan {
   border: 1px solid rgba(0, 242, 255, 0.5);
   color: var(--cyan);
   background: rgba(0, 242, 255, 0.06);
 }
 
-.neural-badge.purple {
+.header-badge.purple {
   border: 1px solid rgba(168, 85, 247, 0.5);
   color: var(--purple);
   background: rgba(168, 85, 247, 0.08);
@@ -97,7 +97,7 @@
 }
 
 /* ── Cards ── */
-.neural-card {
+.panel-card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -121,8 +121,8 @@
 }
 
 /* ── Form ── */
-.neural-input,
-.neural-textarea {
+.panel-input,
+.panel-textarea {
   width: 100%;
   padding: 0.85rem 1rem;
   background: var(--input-bg);
@@ -134,19 +134,19 @@
   margin-bottom: 0.85rem;
 }
 
-.neural-input::placeholder,
-.neural-textarea::placeholder {
+.panel-input::placeholder,
+.panel-textarea::placeholder {
   color: var(--text-muted);
 }
 
-.neural-input:focus,
-.neural-textarea:focus {
+.panel-input:focus,
+.panel-textarea:focus {
   outline: none;
   border-color: var(--border-strong);
   box-shadow: var(--glow-cyan);
 }
 
-.neural-textarea {
+.panel-textarea {
   resize: vertical;
   min-height: 90px;
   margin-bottom: 1.25rem;
@@ -244,7 +244,7 @@
 }
 
 /* ── Buttons ── */
-.btn-neural {
+.btn-accent {
   width: 100%;
   padding: 0.9rem 1.5rem;
   border: none;
@@ -260,12 +260,12 @@
   margin-top: 0.5rem;
 }
 
-.btn-neural:hover:not(:disabled) {
+.btn-accent:hover:not(:disabled) {
   box-shadow: var(--glow-cyan), var(--glow-purple);
   transform: translateY(-1px);
 }
 
-.btn-neural:disabled {
+.btn-accent:disabled {
   opacity: 0.45;
   cursor: not-allowed;
 }

@@ -15,7 +15,7 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { api } from './api';
+import { api, getApiConfigError } from './api';
 import './App.css';
 
 const FILTERS = [
@@ -96,8 +96,7 @@ function DeleteModal({ task, onConfirm, onCancel }) {
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         <h3>Delete Task</h3>
         <p>
-          Permanently remove &ldquo;{task.title}&rdquo; from the neural network?
-          This cannot be undone.
+          Permanently remove &ldquo;{task.title}&rdquo;? This cannot be undone.
         </p>
         <div className="modal-actions">
           <button className="btn btn-secondary" onClick={onCancel}>
@@ -134,13 +133,13 @@ function TaskForm({ onSubmit, loading }) {
   };
 
   return (
-    <form className="neural-card task-form" onSubmit={handleSubmit}>
+    <form className="panel-card task-form" onSubmit={handleSubmit}>
       <h2 className="section-label">
         <span>+</span> New Task
       </h2>
 
       <input
-        className="neural-input"
+        className="panel-input"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         placeholder="Task title *"
@@ -148,7 +147,7 @@ function TaskForm({ onSubmit, loading }) {
       />
 
       <textarea
-        className="neural-textarea"
+        className="panel-textarea"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
         placeholder="Description (optional)"
@@ -162,7 +161,7 @@ function TaskForm({ onSubmit, loading }) {
         </label>
         <input
           id="dueDate"
-          className="neural-input"
+          className="panel-input"
           type="datetime-local"
           value={dueDate}
           onChange={(e) => setDueDate(e.target.value)}
@@ -170,8 +169,8 @@ function TaskForm({ onSubmit, loading }) {
         />
       </div>
 
-      <button className="btn-neural" type="submit" disabled={loading || !title.trim()}>
-        {loading ? 'Initializing...' : 'Deploy Task'}
+      <button className="btn-accent" type="submit" disabled={loading || !title.trim()}>
+        {loading ? 'Adding...' : 'Add Task'}
       </button>
     </form>
   );
@@ -313,7 +312,7 @@ export default function App() {
   const [sort, setSort] = useState('newest');
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(() => getApiConfigError());
   const [deleteTarget, setDeleteTarget] = useState(null);
 
   const totalTasks = counts.active + counts.completed;
@@ -407,12 +406,12 @@ export default function App() {
     <div className="app">
       <header className="header-card">
         <div className="header-badges">
-          <span className="neural-badge cyan">+ Neural Tasks</span>
-          <span className="neural-badge purple">{totalTasks} Total</span>
+          <span className="header-badge cyan">+ Tasks</span>
+          <span className="header-badge purple">{totalTasks} Total</span>
         </div>
         <h1 className="header-title">TASK MANAGER</h1>
         <p className="header-subtitle">
-          Organize your personal to-do list with neural precision
+          Organize your personal to-do list
         </p>
       </header>
 
@@ -427,7 +426,7 @@ export default function App() {
 
       <TaskForm onSubmit={handleCreate} loading={actionLoading} />
 
-      <div className="neural-card queue-card">
+      <div className="panel-card queue-card">
         <div className="queue-toolbar">
           <div className="queue-toolbar-row">
             <div className="status-pills">
@@ -490,7 +489,7 @@ export default function App() {
         <div className="queue-divider" />
 
         {loading ? (
-          <div className="loading">Syncing neural tasks...</div>
+          <div className="loading">Loading tasks...</div>
         ) : tasks.length === 0 ? (
           <div className="empty-state">
             <div className="empty-state-icon-wrap">
@@ -499,7 +498,7 @@ export default function App() {
             <p className="empty-state-text">
               {search || filter !== 'all'
                 ? 'No tasks match your search or filter.'
-                : 'No tasks yet. Deploy your first mission above.'}
+                : 'No tasks yet. Add your first task above.'}
             </p>
           </div>
         ) : (

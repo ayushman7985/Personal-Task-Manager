@@ -39,11 +39,15 @@ _cors_origins = [
     "http://127.0.0.1:5173",
 ]
 if _frontend_url := os.getenv("FRONTEND_URL"):
-    _cors_origins.append(_frontend_url.rstrip("/"))
+    for origin in _frontend_url.split(","):
+        origin = origin.strip().rstrip("/")
+        if origin:
+            _cors_origins.append(origin)
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=_cors_origins,
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

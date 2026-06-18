@@ -4,6 +4,6 @@
   "outputDirectory": "dist",
   "installCommand": "rm -rf node_modules && npm install",
   "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+    { "source": "/((?!assets/).*)", "destination": "/index.html" }
   ]
 }

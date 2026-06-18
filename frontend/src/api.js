@@ -1,19 +1,79 @@
-const API_BASE = import.meta.env.VITE_API_URL || '/api';
+const configuredBase = import.meta.env.VITE_API_URL?.replace(/\/$/, '');
+
+/** @returns {string} */
+export function getApiBase() {
+  if (configuredBase) return configuredBase;
+  if (import.meta.env.DEV) return '/api';
+  return '';
+}
+
+export function isApiConfigured() {
+  return Boolean(getApiBase());
+}
+
+export function getApiConfigError() {
+  if (isApiConfigured()) return null;
+  return (
+    'Backend URL is not configured. Set VITE_API_URL in Vercel to your Render API ' +
+    '(e.g. https://your-app.onrender.com/api), then redeploy.'
+  );
+}
+
+async function parseResponseBody(response) {
+  const text = await response.text();
+  if (!text) return null;
+
+  const contentType = response.headers.get('content-type') || '';
+  if (contentType.includes('application/json')) {
+    try {
+      return JSON.parse(text);
+    } catch {
+      throw new Error('Server returned invalid JSON.');
+    }
+  }
+
+  if (text.trimStart().startsWith('<!DOCTYPE') || text.trimStart().startsWith('<html')) {
+    throw new Error(
+      'API returned HTML instead of JSON. Set VITE_API_URL on Vercel to your Render ' +
+      'backend URL (e.g. https://your-app.onrender.com/api) and redeploy.'
+    );
+  }
+
+  try {
+    return JSON.parse(text);
+  } catch {
+    throw new Error(text.slice(0, 120) || 'Unexpected server response.');
+  }
+}
 
 async function request(path, options = {}) {
-  const response = await fetch(`${API_BASE}${path}`, {
+  const base = getApiBase();
+  if (!base) {
+    throw new Error(getApiConfigError());
+  }
+
+  const url = `${base}${path.startsWith('/') ? path : `/${path}`}`;
+  const response = await fetch(url, {
     headers: { 'Content-Type': 'application/json', ...options.headers },
     ...options,
   });
 
   if (response.status === 204) return null;
 
+  const body = await parseResponseBody(response);
+
   if (!response.ok) {
-    const error = await response.json().catch(() => ({}));
-    throw new Error(error.detail || 'Request failed');
+    const detail = body?.detail;
+    throw new Error(
+      typeof detail === 'string'
+        ? detail
+        : Array.isArray(detail)
+          ? detail.map((d) => d.msg).join(', ')
+          : 'Request failed'
+    );
   }
 
-  return response.json();
+  return body;
 }
 
 export const api = {

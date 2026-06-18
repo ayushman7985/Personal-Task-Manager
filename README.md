@@ -166,9 +166,13 @@ The React frontend deploys to **Vercel**. The FastAPI backend should be deployed
 
 ### Environment variables (Vercel)
 
-| Variable | Example |
-|----------|---------|
-| `VITE_API_URL` | `https://your-app.onrender.com/api` |
+| Variable | Example | Required |
+|----------|---------|----------|
+| `VITE_API_URL` | `https://your-app.onrender.com/api` | **Yes** |
+
+> **Important:** `VITE_` variables are embedded at **build time**. After adding or changing `VITE_API_URL`, you must **redeploy** on Vercel (Deployments → Redeploy).
+
+Without `VITE_API_URL`, the app calls `/api` on the Vercel domain, which returns `index.html` and causes the JSON parse error.
 
 ### Environment variables (Render — backend)
 

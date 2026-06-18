@@ -180,12 +180,18 @@ Set `FRONTEND_URL` on Render so the API accepts requests from your Vercel domain
 
 ### Fix for build error 126
 
-If you see `Command "npm run build" exited with 126`:
+If you see `Permission denied` or `Command "npm run build" exited with 126`:
 
-1. Set **Root Directory** to `frontend` in Vercel (not the repo root).
-2. Choose **Vite** as the framework — do not use the FastAPI preset for the frontend project.
-3. Do **not** commit `node_modules/` — ensure `.gitignore` is in the repo and push again.
-4. The build script uses `npx vite build` so Vercel installs the correct Linux binary during deploy.
+1. **Do not commit `node_modules/`** — it must be in `.gitignore`. Windows binaries break on Vercel's Linux builders.
+2. If `node_modules` was already pushed, remove it from git:
+   ```bash
+   git rm -r --cached frontend/node_modules
+   git commit -m "Remove node_modules from repository"
+   git push
+   ```
+3. Set **Root Directory** to `frontend` in Vercel (not the repo root).
+4. Choose **Vite** as the framework — not FastAPI.
+5. Vercel runs `rm -rf node_modules && npm install` on deploy to ensure a fresh Linux install.
 
 ---
 

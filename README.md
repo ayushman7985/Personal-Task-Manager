@@ -103,11 +103,16 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
-Start the API server from the `backend` directory:
+Start the API server from the **project root**:
 
 ```bash
-cd backend
-uvicorn main:app --reload --port 8000
+uvicorn backend.main:app --reload --port 8000
+```
+
+For production (e.g. Render):
+
+```bash
+uvicorn backend.main:app --host 0.0.0.0 --port $PORT
 ```
 
 The API will be available at **http://localhost:8000**.
@@ -216,7 +221,8 @@ To reset all data, stop the server and delete `backend/tasks.db`. A fresh databa
 
 ## Development Notes
 
-- Run `uvicorn` from the `backend/` directory so `tasks.db` is created in the correct location.
+- Run `uvicorn backend.main:app` from the **project root** (not from inside `backend/`).
+- SQLite data is stored at `backend/tasks.db`.
 - CORS is configured for `http://localhost:5173` and `http://127.0.0.1:5173`. Add additional origins in `backend/main.py` as needed.
 - The backend includes a lightweight migration that adds the `priority` column to existing databases.
 

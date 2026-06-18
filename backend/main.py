@@ -6,9 +6,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import case, func, inspect, text
 from sqlalchemy.orm import Session
 
-from database import Base, engine, get_db
-from models import Task
-from schemas import TaskCounts, TaskCreate, TaskReorder, TaskResponse, TaskUpdate
+from .database import Base, engine, get_db
+from .models import Task
+from .schemas import TaskCounts, TaskCreate, TaskReorder, TaskResponse, TaskUpdate
 
 Base.metadata.create_all(bind=engine)
 

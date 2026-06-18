@@ -150,6 +150,45 @@ Output is written to `frontend/dist/`. Serve those static files with any web ser
 
 ---
 
+## Deploy to Vercel (Frontend)
+
+The React frontend deploys to **Vercel**. The FastAPI backend should be deployed separately (e.g. **Render**).
+
+### Vercel project settings
+
+| Setting | Value |
+|---------|-------|
+| **Root Directory** | `frontend` |
+| **Framework Preset** | `Vite` (not FastAPI) |
+| **Build Command** | `npm run build` |
+| **Output Directory** | `dist` |
+| **Install Command** | `npm install` |
+
+### Environment variables (Vercel)
+
+| Variable | Example |
+|----------|---------|
+| `VITE_API_URL` | `https://your-app.onrender.com/api` |
+
+### Environment variables (Render — backend)
+
+| Variable | Example |
+|----------|---------|
+| `FRONTEND_URL` | `https://your-app.vercel.app` |
+
+Set `FRONTEND_URL` on Render so the API accepts requests from your Vercel domain (CORS).
+
+### Fix for build error 126
+
+If you see `Command "npm run build" exited with 126`:
+
+1. Set **Root Directory** to `frontend` in Vercel (not the repo root).
+2. Choose **Vite** as the framework — do not use the FastAPI preset for the frontend project.
+3. Do **not** commit `node_modules/` — ensure `.gitignore` is in the repo and push again.
+4. The build script uses `npx vite build` so Vercel installs the correct Linux binary during deploy.
+
+---
+
 ## API Reference
 
 Base URL: `http://localhost:8000/api`

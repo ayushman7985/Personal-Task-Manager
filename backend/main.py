@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+import os
 from typing import Literal, Optional
 
 from fastapi import Depends, FastAPI, HTTPException, Query
@@ -33,9 +34,16 @@ _migrate_db()
 
 app = FastAPI(title="Task Manager API")
 
+_cors_origins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+if _frontend_url := os.getenv("FRONTEND_URL"):
+    _cors_origins.append(_frontend_url.rstrip("/"))
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_origins=_cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
